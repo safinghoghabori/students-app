@@ -3,22 +3,26 @@ import AddStudent from "./components/AddStudent/AddStudent";
 
 import { BrowserRouter, Route } from "react-router-dom";
 import ViewStudents from "./components/ViewStudents/ViewStudents";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="App">
-        <Navbar />
+    <Provider store={store}>
+      <BrowserRouter>
+        <div className="App">
+          <Navbar />
 
-        <Route exact path="/">
-          <AddStudent />
-        </Route>
+          <Route exact path="/">
+            <AddStudent />
+          </Route>
 
-        <Route path="/view-students">
-          <ViewStudents />
-        </Route>
-      </div>
-    </BrowserRouter>
+          <Route path="/view-students">
+            <ViewStudents />
+          </Route>
+        </div>
+      </BrowserRouter>
+    </Provider>
   );
 }
 

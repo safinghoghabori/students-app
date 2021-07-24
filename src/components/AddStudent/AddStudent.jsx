@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -7,6 +7,11 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import { Paper } from "@material-ui/core";
+
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+
+import { addStudent } from "../../redux/actions/studentActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,6 +37,8 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     fontSize: 14,
+    textAlign: "center",
+    color: "red",
   },
   pos: {
     marginBottom: 12,
@@ -40,18 +47,80 @@ const useStyles = makeStyles((theme) => ({
 
 function AddStudent() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const [name, setName] = useState("");
+  const [rollno, setRollno] = useState("");
+  const [address, setAddress] = useState("");
+  const [email, setEmail] = useState("");
+  const [contact, setContact] = useState("");
+
+  const [requiredError, setRequiredError] = useState(false);
+  const [rollnoError, setRollnoError] = useState(false);
+  const [nameError, setNameError] = useState(false);
+  const [addressError, setAddressError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [contactError, setContactError] = useState(false);
+
+  const handleSubmit = (e) => e.preventDefault();
+
+  const handleAdd = () => {
+    if (!name || !rollno || !address || !email || !contact) {
+      setRequiredError(true);
+      return false;
+    } else {
+      setRequiredError(false);
+
+      //   regex
+      if (!name.match(/^[A-Za-z ]+$/)) {
+        setNameError(true);
+      } else {
+        setNameError(false);
+      }
+      if (
+        !email.match(
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+        )
+      ) {
+        setEmailError(true);
+      } else {
+        setEmailError(false);
+      }
+      if (!contact.match(/^[0-9]{10}$/)) {
+        setContactError(true);
+      } else {
+        setContactError(false);
+      }
+      if (!rollno.match(/^[0-9]*$/)) {
+        setRollnoError(true);
+      } else {
+        setRollnoError(false);
+      }
+    }
+
+    console.log(nameError, contactError, emailError, rollnoError);
+    if (!nameError && !contactError && !emailError && !rollnoError) {
+      console.log("indise if");
+      const studData = { rollno, name, address, contact, email };
+      dispatch(addStudent(studData));
+      history.push("/view-students");
+    }
+  };
 
   return (
     <Card className={classes.root}>
       <h1>Add Student</h1>
       <CardContent>
-        <form className={classes.formArea} noValidate autoComplete="off">
+        <form className={classes.formArea} noValidate onSubmit={handleSubmit}>
           <TextField
             required
             id="outlined-required"
             label="Rollno"
             variant="outlined"
-            type="number"
+            type="text"
+            onChange={(e) => setRollno(e.target.value)}
+            helperText={rollnoError && "Please enter only digits."}
           />
           <TextField
             required
@@ -59,13 +128,18 @@ function AddStudent() {
             label="Name"
             variant="outlined"
             type="text"
+            onChange={(e) => setName(e.target.value)}
+            helperText={nameError ? "Please enter only characters." : ""}
           />
           <TextField
+            required
             id="outlined-multiline-static"
             label="Address"
             multiline
             rows={4}
             variant="outlined"
+            onChange={(e) => setAddress(e.target.value)}
+            helperText={addressError && "Please enter only characters."}
           />
           <TextField
             required
@@ -73,6 +147,8 @@ function AddStudent() {
             label="Contact Number"
             type="number"
             variant="outlined"
+            onChange={(e) => setContact(e.target.value)}
+            helperText={contactError && "Please enter 10 digits only."}
           />
           <TextField
             required
@@ -80,12 +156,24 @@ function AddStudent() {
             label="Email"
             type="email"
             variant="outlined"
+            onChange={(e) => setEmail(e.target.value)}
+            helperText={emailError && "Please enter valid email."}
           />
+
+          {requiredError && (
+            <Typography
+              className={classes.title}
+              color="textSecondary"
+              gutterBottom
+            >
+              All fields are compulsory.
+            </Typography>
+          )}
         </form>
       </CardContent>
       <CardActions>
         <Button variant="contained">Cancle</Button>
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="primary" onClick={handleAdd}>
           Add
         </Button>
       </CardActions>
