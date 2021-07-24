@@ -7,6 +7,8 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 
+import { useHistory } from "react-router-dom";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -21,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
 
 function Navbar() {
   const classes = useStyles();
+  const history = useHistory();
+
+  const handleView = () => history.push("/view-students");
+  const handleNew = () => history.push("/");
 
   return (
     <div className={classes.root}>
@@ -37,7 +43,12 @@ function Navbar() {
           <Typography variant="h6" className={classes.title}>
             Students
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit" onClick={handleView}>
+            View Students
+          </Button>
+          <Button color="inherit" onClick={handleNew}>
+            Add New Student
+          </Button>
         </Toolbar>
       </AppBar>
     </div>

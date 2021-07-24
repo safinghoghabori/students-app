@@ -2,6 +2,7 @@ import Navbar from "./components/Navbar/Navbar";
 import AddStudent from "./components/AddStudent/AddStudent";
 
 import { BrowserRouter, Route } from "react-router-dom";
+import ViewStudents from "./components/ViewStudents/ViewStudents";
 
 function App() {
   return (
@@ -9,8 +10,12 @@ function App() {
       <div className="App">
         <Navbar />
 
-        <Route path="/">
+        <Route exact path="/">
           <AddStudent />
+        </Route>
+
+        <Route path="/view-students">
+          <ViewStudents />
         </Route>
       </div>
     </BrowserRouter>
