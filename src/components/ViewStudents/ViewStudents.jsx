@@ -111,7 +111,7 @@ function ViewStudents() {
       <div className={classes.mainClass}>
         {state &&
           state.students.map((item) => (
-            <Card className={classes.root} variant="outlined">
+            <Card className={classes.root} key={item.rollno} variant="outlined">
               <CardContent>
                 <Typography
                   className={classes.title}

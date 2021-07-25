@@ -67,6 +67,7 @@ function EditDialog(props) {
               name="rollno"
               id="outlined-required"
               label="Enter Rollno of Edit Item"
+              placeholder="Rollno should be same as selected item"
               variant="outlined"
               type="text"
               value={editItemData.rollno}

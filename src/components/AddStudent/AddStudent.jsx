@@ -71,42 +71,53 @@ function AddStudent() {
       return false;
     } else {
       setRequiredError(false);
-
-      //   regex
-      if (!name.match(/^[A-Za-z ]+$/)) {
-        setNameError(true);
-      } else {
-        setNameError(false);
-      }
-      if (
-        !email.match(
-          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-        )
-      ) {
-        setEmailError(true);
-      } else {
-        setEmailError(false);
-      }
-      if (!contact.match(/^[0-9]{10}$/)) {
-        setContactError(true);
-      } else {
-        setContactError(false);
-      }
-      if (!rollno.match(/^[0-9]*$/)) {
-        setRollnoError(true);
-      } else {
-        setRollnoError(false);
-      }
     }
 
-    console.log(nameError, contactError, emailError, rollnoError);
-    if (!nameError && !contactError && !emailError && !rollnoError) {
-      console.log("indise if");
-      const studData = { rollno, name, address, contact, email };
-      dispatch(addStudent(studData));
-      history.push("/view-students");
+    let isFormValid = true;
+
+    //   regex
+    if (!name.match(/^[A-Za-z ]+$/)) {
+      setNameError(true);
+      isFormValid = false;
+    } else {
+      setNameError(false);
+    }
+    if (
+      !email.match(
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+      )
+    ) {
+      setEmailError(true);
+      isFormValid = false;
+    } else {
+      setEmailError(false);
+    }
+    if (!contact.match(/^[0-9]{10}$/)) {
+      setContactError(true);
+      isFormValid = false;
+    } else {
+      setContactError(false);
+    }
+    if (!rollno.match(/^[0-9]*$/)) {
+      setRollnoError(true);
+      isFormValid = false;
+    } else {
+      setRollnoError(false);
+    }
+
+    if (isFormValid) {
+      console.log(nameError, contactError, emailError, rollnoError);
+
+      if (!nameError && !contactError && !emailError && !rollnoError) {
+        console.log("indise if");
+        const studData = { rollno, name, address, contact, email };
+        dispatch(addStudent(studData));
+        history.push("/view-students");
+      }
     }
   };
+
+  console.log("rollnoerror...", rollnoError);
 
   return (
     <Card className={classes.root}>
@@ -120,7 +131,7 @@ function AddStudent() {
             variant="outlined"
             type="text"
             onChange={(e) => setRollno(e.target.value)}
-            helperText={rollnoError && "Please enter only digits."}
+            helperText={rollnoError ? "Please enter only digits." : ""}
           />
           <TextField
             required
